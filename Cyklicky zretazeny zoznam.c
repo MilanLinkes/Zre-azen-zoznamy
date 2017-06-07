@@ -67,45 +67,45 @@ TWN *ctwl_insert_left(CTWL* list, float val){
 		return novy;
 	} else {
 		flag = list->cur->prev;
-		novy->next = list->cur;
 		list->cur->prev = novy;
+	    novy->next = list->cur;
 		novy->prev = flag;
 		flag->next = novy;
-
-		return novy;
 		}
+			return novy;
 }
 
 CTWL *ctwl_create_random(unsigned int size) {
 	int i;
 	float data;
 	CTWL *list;
-	TWN *flag;
-	
+
 	list = ctwl_create_empty();
-		
-	flag = malloc(sizeof(TWN));
-	
-	flag = list->cur;
-	
-	for(i=1; i<=size; i++){
+
+	for(i=0; i<size; i++){
 		data = rand()%5;
 		list->cur = ctwl_insert_right(list, data);
-		printf("%d ", list->cur->data);
-		}
-
+	}
 	return list;	
 }
 
+void ctwl_cur_step_right(CTWL *list){
+	list->cur = list->cur->next;
+}
+
+void ctwl_cur_step_left(CTWL *list){
+	list->cur = list->cur->prev;
+}
+
 void ctwl_print(CTWL *list){
-	CTWL *prvy;
+	TWN *prvy;
 	int i;
-	prvy = list;
+	prvy = list->cur;
 	
 	do{
-		printf("%d ", list->cur->data);
-	} while(prvy != list);
-
+		printf("%f ", list->cur->data);
+		ctwl_cur_step_right(list);
+	} while(list->cur != prvy);
 }
 
 int main(void) {
@@ -114,9 +114,17 @@ int main(void) {
 	srand(time(0));
 	//nieco = ctwl_create_empty();
     //nieco->cur = ctwl_insert_left(nieco, 5);
-    nieco = ctwl_create_random(b);
+    
+	nieco = ctwl_create_random(b);
     ctwl_print(nieco);
+    printf("\n");
+    //ctwl_insert_right(nieco, 500);
+    //ctwl_print(nieco);
+    //printf("\n");
+    //ctwl_insert_left(nieco, 500);
+	ctwl_print(nieco);
 	
-	//ieco = ctwl_create_random(b);
+	//nieco = ctwl_create_random(b);
 }
+
 
