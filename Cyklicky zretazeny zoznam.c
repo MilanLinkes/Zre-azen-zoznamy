@@ -99,7 +99,7 @@ void ctwl_cur_step_left(CTWL *list){
 
 void ctwl_print(CTWL *list){
 	TWN *prvy;
-	int i;
+
 	prvy = list->cur;
 	
 	do{
@@ -108,8 +108,22 @@ void ctwl_print(CTWL *list){
 	} while(list->cur != prvy);
 }
 
+unsigned int ctwl_get_size(CTWL *list){
+	TWN *prvy;
+	unsigned int size = 0;
+	
+	prvy = list->cur;
+	
+	do{
+		ctwl_cur_step_right(list);
+		size++;
+		printf("size: %d\n", size);
+	} while(list->cur != prvy);
+}
+
+
 int main(void) {
-	unsigned int b =5;
+	unsigned int b =5, size;
 	CTWL *nieco;
 	srand(time(0));
 	//nieco = ctwl_create_empty();
@@ -118,13 +132,13 @@ int main(void) {
 	nieco = ctwl_create_random(b);
     ctwl_print(nieco);
     printf("\n");
-    //ctwl_insert_right(nieco, 500);
+    ctwl_insert_right(nieco, 503);
     //ctwl_print(nieco);
     //printf("\n");
-    //ctwl_insert_left(nieco, 500);
+    ctwl_insert_left(nieco, 500);
 	ctwl_print(nieco);
 	
-	//nieco = ctwl_create_random(b);
+	size = ctwl_get_size(nieco);
+	
+	//ieco = ctwl_create_random(b);
 }
-
-
