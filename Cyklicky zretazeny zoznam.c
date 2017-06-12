@@ -15,6 +15,14 @@ typedef struct {
 }CTWL;
 
 
+void ctwl_cur_step_right(CTWL *list){
+	list->cur = list->cur->next;
+}
+
+void ctwl_cur_step_left(CTWL *list){
+	list->cur = list->cur->prev;
+}
+
 CTWL *ctwl_create_empty(void) {
 	
 	CTWL *novy_zoznam;
@@ -46,7 +54,7 @@ TWN *ctwl_insert_right(CTWL* list, float val){
 		list->cur->next = novy;
 		novy->next = flag;
 		flag->prev = novy;
-
+		ctwl_cur_step_right(list);
 		return novy;
 		}
 }
@@ -71,6 +79,7 @@ TWN *ctwl_insert_left(CTWL* list, float val){
 	    novy->next = list->cur;
 		novy->prev = flag;
 		flag->next = novy;
+		ctwl_cur_step_left(list);
 		}
 			return novy;
 }
@@ -89,23 +98,18 @@ CTWL *ctwl_create_random(unsigned int size) {
 	return list;	
 }
 
-void ctwl_cur_step_right(CTWL *list){
-	list->cur = list->cur->next;
-}
-
-void ctwl_cur_step_left(CTWL *list){
-	list->cur = list->cur->prev;
-}
-
 void ctwl_print(CTWL *list){
 	TWN *prvy;
 
 	prvy = list->cur;
 	
-	do{
+	printf("cur:%f \n", list->cur->data);
+	ctwl_cur_step_right(list);
+	
+	while(list->cur != prvy){
 		printf("%f ", list->cur->data);
 		ctwl_cur_step_right(list);
-	} while(list->cur != prvy);
+	} 
 }
 
 unsigned int ctwl_get_size(CTWL *list){
@@ -114,11 +118,12 @@ unsigned int ctwl_get_size(CTWL *list){
 	
 	prvy = list->cur;
 	
-	do{
-		ctwl_cur_step_right(list);
+	 while(list->cur != prvy){
 		size++;
 		printf("size: %d\n", size);
-	} while(list->cur != prvy);
+		ctwl_cur_step_right(list);
+	}
+	return size;
 }
 
 
@@ -132,13 +137,11 @@ int main(void) {
 	nieco = ctwl_create_random(b);
     ctwl_print(nieco);
     printf("\n");
-    ctwl_insert_right(nieco, 503);
+    //ctwl_insert_right(nieco, 503);
     //ctwl_print(nieco);
     //printf("\n");
-    ctwl_insert_left(nieco, 500);
-	ctwl_print(nieco);
+    //ctwl_insert_left(nieco, 500);
 	
 	size = ctwl_get_size(nieco);
-	
-	//ieco = ctwl_create_random(b);
+			printf("size: %d\n", size);
 }
