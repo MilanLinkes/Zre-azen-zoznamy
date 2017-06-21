@@ -32,14 +32,15 @@ char ctwl_delete(CTWL* list){
 	}
 	
 	if(list->cur->next == list->cur && list->cur->prev == list->cur){ 
-		list->cur=NULL;
-		free(list->cur);
+		free(list->cur->next);
+		free(list->cur->prev);
+		list->cur = NULL;
 		return CTWL_OK;
 	}
 	
 	kurzor = list->cur;
 	dalsi = list->cur->next;
-	predosly = list->cur->next;
+	predosly = list->cur->prev;
 	
 	ctwl_cur_step_right(list);
 	list->cur->prev = predosly;
@@ -51,24 +52,48 @@ char ctwl_delete(CTWL* list){
 	return CTWL_OK;
 }
 
-void ctwl_destroy(CTWL* list){
-	TWN *kurzor, *predosly;
-		
-	kurzor = list->cur;
+void ctwl_print(CTWL *list){
+	TWN *prvy;
 	
-	if(kurzor == NULL){
+	if(list->cur == NULL){
+		printf("List is empty.\n");
+		return;
+	} 
+	prvy = list->cur;
+
+    printf("cur:%.2f ", list->cur->data);
+    
+    ctwl_cur_step_right(list);
+
+    while(list->cur != prvy){
+        printf("%.2f ", list->cur->data);
+        ctwl_cur_step_right(list);
+     }
+	printf("\n");
+}
+
+void ctwl_destroy(CTWL* list){
+	TWN *prvy;
+		
+	prvy = list->cur;
+	
+	if(list->cur == NULL){
 		free(list);
 		
 	} else {
-		
-		while(list->cur != kurzor){
-			ctwl_cur_step_right(list);
-			free(list->cur);
-		}
-	
-		free(list->cur->prev);
+		 while(1){
+  			ctwl_cur_step_right(list);	
+
+  			if(list->cur != prvy){
+    			free(list->cur);
+    			 	 
+			} else {
+					break;
+			}
+		} 
 		free(list->cur);
 	}
+	free(list);
 }
 
 CTWL *ctwl_create_empty(void) {
@@ -77,7 +102,6 @@ CTWL *ctwl_create_empty(void) {
 	novy_zoznam = (CTWL*)malloc(sizeof(CTWL));
 	
 	if (novy_zoznam == NULL) {
-		printf("Unable to allocate.\n");
 		return 0;
 	}
 
@@ -92,7 +116,6 @@ TWN *ctwl_insert_right(CTWL* list, float val){
 	novy = malloc(sizeof(TWN));
 	
 	if (novy == NULL) {
-		printf("Unable to allocate.\n");
 		return 0;
 	}
 	
@@ -124,7 +147,6 @@ TWN *ctwl_insert_left(CTWL* list, float val){
 	novy = malloc(sizeof(TWN));
 	
 	if (novy == NULL) {
-		printf("Unable to allocate.\n");
 		return 0;
 	}
 	
@@ -163,25 +185,7 @@ CTWL *ctwl_create_random(unsigned int size) {
 	return list;	
 }
 
-void ctwl_print(CTWL *list){
-	TWN *prvy;
-	
-	if(list->cur == NULL){
-		printf("List is empty.\n");
-		return;
-	} 
-	prvy = list->cur;
 
-    printf("cur:%.2f ", list->cur->data);
-    
-    ctwl_cur_step_right(list);
-
-    while(list->cur != prvy){
-        printf("%.2f ", list->cur->data);
-        ctwl_cur_step_right(list);
-     }
-	printf("\n");
-}
 
 unsigned int ctwl_get_size(CTWL *list){
 	TWN *prvy;
@@ -204,12 +208,14 @@ unsigned int ctwl_get_size(CTWL *list){
 }
 
 int main(void){
-	unsigned int b = 8;
+	unsigned int b = 5;
 	CTWL *nieco;
 	srand(time(0));
     
 	nieco = ctwl_create_random(b);
 	printf("Size of the list is: %d\n",ctwl_get_size(nieco));
 	printf("\n");
-	ctwl_print(nieco); 
+	ctwl_print(nieco);
+	//ctwl_delete(nieco);
+	ctwl_destroy(nieco);
 }
